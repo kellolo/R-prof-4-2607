@@ -24,13 +24,13 @@ export default class Message extends Component {
             <Chip 
                 deleteIcon={<DoneIcon />} 
                 color="primary" 
+                className="me" 
                 onDelete={this.handleDelete} 
                 label={this.props.message.text}
                 avatar={<Avatar>{this.props.message.name}</Avatar>} />:
             <Chip 
                 deleteIcon={<DoneIcon />} 
                 color="secondary"
-                className="bot" 
                 label={this.props.message.text}
                 onDelete={this.handleDelete} 
                 avatar={<Avatar>{this.props.message.name}</Avatar>} />
