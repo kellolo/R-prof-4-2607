@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Message from '../Message/Message'
-import { Paper, Button, IconButton, TextField } from '@material-ui/core' 
+import { Paper, Button, IconButton, TextField, Typography } from '@material-ui/core' 
 import SendIcon  from '@material-ui/icons/SendRounded'
 import { connect } from 'react-redux'
 import { getChatsSuccess } from '../../store/actions/chats'
-import uuid from 'uuidv4'
+import { uuid } from 'uuidv4'
 class Chat extends Component {
 
     state = {
@@ -13,12 +13,13 @@ class Chat extends Component {
     }
 
     handleSendMessage = (value) => {
-        
+        const { id } = this.props.match.params
         this.setState(state => ({
             ...state,
             messages: [...this.state.messages, {name: 'я', text: value} ]
         }))
         this.setState({input: ''})
+        this.props.addMessage({name: 'я', text: value, id: uuid()}, id)
     }
 
     handleClick = (value) => {
@@ -40,6 +41,7 @@ class Chat extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const { id } = this.props.match.params
         const currentMessage = this.state.messages
         const lastMessage = currentMessage[currentMessage.length -1]
 
@@ -48,16 +50,23 @@ class Chat extends Component {
                 this.setState(state => ({
                     ...state,
                     messages: [...this.state.messages, {name: 'Бот', text: `Бот компот`} ]
-                }))
+                }),
+                    this.props.addMessage({name: 'Бот', text: "боткомпот", id: uuid()}, id)
+
+                )
             }, 1000)      
         }
     }
 
     render() {
-        // console.log(this.porps)
-        const chatNum = this.props.numSelectedChat ? this.props.numSelectedChat : 0
-        // const Messages = this.state.messages.map((item, index) => <Message key={index} message={item}/>)
-        const Messages = this.props.chats[0].messages.map( (item, index) => <Message key={index} message={item} />)
+
+        const { id }  = this.props.match.params
+        let Messages = <Typography>No Chats</Typography>
+
+        if (id !== undefined && this.props.chats) {
+            Messages = this.props.chats[this.props.numSelectedChat].messages.map( (item, index) => <Message key={index} message={item} />)
+        }
+
         return(
             <section className="chat">
                 <div className="message-list">
@@ -65,6 +74,7 @@ class Chat extends Component {
                 </div>
                 <div className="chat-footer">
                     <TextField 
+                        disabled={id === undefined ? true : false}
                         autoFocus
                         fullWidth
                         size="small"
@@ -75,6 +85,7 @@ class Chat extends Component {
                         onKeyUp={(event) => this.handleKeyUp(event, this.state.input)}/>
 
                     <IconButton
+                        disabled={id === undefined ? true : false}
                         color="primary" 
                         onClick={() => this.handleClick(this.state.input)}>
                             <SendIcon/>

@@ -4,12 +4,13 @@ import Profile from '../Profile/Profile'
 import NewChat from '../NewChat/NewChat'
 export default class Header extends Component {
     render() {
+        const Title = this.props.chatName !== null ? this.props.chatName : this.props.title
         return(
             <AppBar position="static">
                 <Toolbar variant="dense">
                     <Profile user={this.props.user} handleNameChange={this.props.handleNameChange}/>
                     <Typography variant="h6" >
-                        {this.props.title}
+                        { Title }
                     </Typography>
                     <ButtonGroup className="button-group" variant="contained">
                         <Button variant="outlined">Чаты</Button>

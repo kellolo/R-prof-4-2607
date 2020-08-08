@@ -55,12 +55,17 @@ export default function NewChat(props) {
     }
 
     const handleClose = () => {
+        setSelectedUser({
+            id: '',
+            name: '',
+            avatar: ''
+        })
         setOpen(false)
     }
 
     const handleKeyUp = (event) => {
         if (event.keyCode === 13) {
-            if (selectedUser.id.length > 0 || selectedUser.lastName.length > 0) {
+            if (selectedUser.id.length > 0 || selectedUser.name.length > 0) {
                 handleConfirm()
             }
         }
@@ -90,13 +95,7 @@ export default function NewChat(props) {
             avatar: searchUser.avatar === '' ? searchUser.name : searchUser.avatar
         })
     }
-
-    const handleLogOut = () => {
-        //props.handleLogOut()
-        handleClose()
-    } 
     
-    const error = props.error ? 'Data is not set' : 'OK'
   return (
     <div>
         <Button variant="outlined" onClick={handleClickOpen} >Новый чат</Button>
@@ -114,7 +113,7 @@ export default function NewChat(props) {
             </div>
           
         </DialogTitle>
-        <DialogContent>
+        <DialogContent onKeyUp={handleKeyUp}>
             <Avatar className="avatar" className={classes.large} > {selectedUser.avatar} </Avatar>
             <FormControl className={classes.formControl} fullWidth>
                 <InputLabel shrink htmlFor="age-native-label-placeholder">
@@ -134,10 +133,17 @@ export default function NewChat(props) {
             </FormControl>
         </DialogContent>
         <DialogActions>
-            <Button autoFocus onClick={handleClose} color="primary">
+            <Button 
+                onClick={handleClose} 
+                color="primary"
+                variant={selectedUser.name.length > 0 ? "text" : "contained"}>
                 Cancel
             </Button>
-            <Button onClick={handleConfirm} color="primary">
+            <Button 
+                autoFocus 
+                variant={selectedUser.name.length > 0 ? "contained" : "text"}
+                disabled={selectedUser.name.length > 0 ? false : true } 
+                onClick={handleConfirm} color="primary">
                 Confirm
             </Button>
         </DialogActions>

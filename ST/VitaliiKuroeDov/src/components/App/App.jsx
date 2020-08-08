@@ -42,6 +42,7 @@ class App extends Component {
             age: '31'
         },
         currentActiveChat: null,
+        currentActiveChatName: null,
         numSelectedChat: 0,
         error: null,
 
@@ -96,20 +97,34 @@ class App extends Component {
         })
     }
 
-    handleAddMessage = () => {
-
+    handleAddMessage = (content, id) => {
+        if (id !== undefined) {
+            let idGenerator = 1
+            for (let key in this.state.chats ) {
+                idGenerator++
+            }
+            let idChat = this.state.numSelectedChat
+            if (this.state.chats[idChat].id === id ) {
+                this.setState( {
+                    chats: { ...this.state.chats,
+                        [idChat] : {
+                            ...this.state.chats[idChat],
+                            messages: [...this.state.chats[idChat].messages, content]
+                        }
+                    }
+                })
+            }
+        } 
     }
     
     handleSelectChat = (data) => {
         const chatKey = []
         for (let [key, value] of Object.entries(this.state.chats)) {
             chatKey.push(value)
-            if( value.id === data) console.log(key)
+            if( value.id === data) {
+                this.setState({ numSelectedChat: key, currentActiveChatName: value.name })
+            }
         }
-        const chatNum = chatKey.find(item => item.id === data) 
-        this.setState({ numSelectedChat: chatNum })
-
-
     }
     
     handleCurrentChatName = (data) => {
@@ -124,6 +139,7 @@ class App extends Component {
                     <Header 
                         title={this.state.title} 
                         user={this.state.user} 
+                        chatName={this.state.currentActiveChatName}
                         users={this.state.users}
                         handleNewChat={this.handleNewChat}
                         handleNameChange={this.handleNameChange}/>
