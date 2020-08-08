@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import Message from '../Message/Message'
 import { Paper, Button, IconButton, TextField } from '@material-ui/core' 
 import SendIcon  from '@material-ui/icons/SendRounded'
-export default class Chat extends Component {
+import { connect } from 'react-redux'
+import { getChatsSuccess } from '../../store/actions/chats'
+import uuid from 'uuidv4'
+class Chat extends Component {
     state = {
         input: '',
         messages: []
@@ -50,9 +53,10 @@ export default class Chat extends Component {
     }
 
     render() {
+        // console.log(this.porps)
         const Messages = this.state.messages.map((item, index) => <Message key={index} message={item}/>)
         return(
-            <section className="chat container">
+            <section className="chat">
                 <div className="message-list">
                     { Messages }
                 </div>
@@ -77,3 +81,9 @@ export default class Chat extends Component {
         )
     }
 }
+
+const mapStateProps = store => ({})
+const mapDispatchToProps = {
+    getChats: getChatsSuccess,
+}
+export default connect(mapStateProps, mapDispatchToProps)(Chat)

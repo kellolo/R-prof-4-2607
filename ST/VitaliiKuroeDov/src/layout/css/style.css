@@ -21,10 +21,17 @@ main{
 
 .chat{
     width: 70%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 1rem 2rem;
+
 }
 
 .chat-list{
     width: 30%;
+    overflow-y: scroll;
+    height: 90vh;
 }
 
 .container{
@@ -44,7 +51,7 @@ main{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background: #fff; */
+
 }
 
 .message-block{
