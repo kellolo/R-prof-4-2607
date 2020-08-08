@@ -42,7 +42,7 @@ main{
 }
 .message-list{
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     margin: 0 0 1rem 0;
     height: 75vh;
     overflow-y: scroll;
@@ -67,6 +67,6 @@ main{
     color: #fff;
 }
 
-.bot{
+.me{
     margin: 0 0 0 auto;
 }
