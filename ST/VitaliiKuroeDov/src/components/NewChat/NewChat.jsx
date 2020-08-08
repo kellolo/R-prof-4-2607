@@ -1,10 +1,8 @@
 import React from 'react'
 import Draggable from 'react-draggable'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Dialog, DialogActions, DialogContent,
-     DialogTitle, Paper, InputLabel,
-    FormControl, MenuItem, Select,
-     Avatar } from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, InputLabel, FormControl, MenuItem, Select,
+    Avatar } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,9 +69,9 @@ export default function NewChat(props) {
     const handleConfirm = () => {
         props.handleNewChat(selectedUser)
         setSelectedUser({
-            id: null,
-            name: null,
-            avatar: null
+            id: '',
+            name: '',
+            avatar: ''
         })
         handleClose()
     } 
@@ -123,9 +121,9 @@ export default function NewChat(props) {
                     Select user
                 </InputLabel>
                 <Select
+                    labelId="age-native-label-placeholder"
                     value={selectedUser.id}
                     onChange={handleChange}
-                   
                     >
                     {user.map((userItem) => (
                         <MenuItem  key={userItem.id} value={userItem.id}>

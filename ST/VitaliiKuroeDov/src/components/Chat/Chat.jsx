@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { getChatsSuccess } from '../../store/actions/chats'
 import uuid from 'uuidv4'
 class Chat extends Component {
+
     state = {
         input: '',
         messages: []
@@ -54,7 +55,9 @@ class Chat extends Component {
 
     render() {
         // console.log(this.porps)
-        const Messages = this.state.messages.map((item, index) => <Message key={index} message={item}/>)
+        const chatNum = this.props.numSelectedChat ? this.props.numSelectedChat : 0
+        // const Messages = this.state.messages.map((item, index) => <Message key={index} message={item}/>)
+        const Messages = this.props.chats[0].messages.map( (item, index) => <Message key={index} message={item} />)
         return(
             <section className="chat">
                 <div className="message-list">

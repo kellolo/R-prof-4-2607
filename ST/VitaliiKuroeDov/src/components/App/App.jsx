@@ -1,11 +1,12 @@
 import React, { Component, Fragment} from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from '../../store/store'
 import '../../layout/css/style.css'
 import ChatList from '../ChatList/ChatList'
 import Header from '../Header/Header'
 import Chat from '../Chat/Chat'
+import RootRouter from '../../pages/RootRouter/RootRouter'
 import { uuid }  from 'uuidv4'
 
 class App extends Component {
@@ -16,22 +17,22 @@ class App extends Component {
             0: {
                 id: uuid(),
                 name: '1',
-                messages: []
+                messages: [{name: "я", text: "first"}]
             },
             1: {
                 id: uuid(),
                 name: '1',
-                messages: []
+                messages: [{name: "я", text: "second"}]
             },
             2: {
                 id: uuid(),
                 name: '2',
-                messages: []
+                messages: [{name: "я", text: "third"}]
             },
             3: {
                 id: uuid(),
                 name: '3',
-                messages: []
+                messages: [{name: "я", text: "one more"}]
             }
         },
         user: {
@@ -40,7 +41,8 @@ class App extends Component {
             email: 'wilde@bk.ru',
             age: '31'
         },
-        
+        currentActiveChat: null,
+        numSelectedChat: 0,
         error: null,
 
         users: {
@@ -61,11 +63,11 @@ class App extends Component {
             15: {name: 'Анна', avatar: '', id: uuid()},
             16: {name: 'Боря', avatar: '', id: uuid()},
         }
-
     }
+
     handleNewChat = (data) => {
         const chatsContainer = []
-        for (let [key, value] of Object.entries(this.state.chats)){
+        for (let [key, value] of Object.entries(this.state.chats)) {
             chatsContainer.push(value)
         }
         const idNewChat = chatsContainer.find(item => item.id === data.id)
@@ -94,6 +96,27 @@ class App extends Component {
         })
     }
 
+    handleAddMessage = () => {
+
+    }
+    
+    handleSelectChat = (data) => {
+        const chatKey = []
+        for (let [key, value] of Object.entries(this.state.chats)) {
+            chatKey.push(value)
+            if( value.id === data) console.log(key)
+        }
+        const chatNum = chatKey.find(item => item.id === data) 
+        this.setState({ numSelectedChat: chatNum })
+
+
+    }
+    
+    handleCurrentChatName = (data) => {
+        this.setState({currentActiveChat: data})
+        this.handleSelectChat(data)
+    }
+
     render(){
         return(
             <Provider store={store}>
@@ -105,8 +128,31 @@ class App extends Component {
                         handleNewChat={this.handleNewChat}
                         handleNameChange={this.handleNameChange}/>
                     <main>
-                        <Chat/>
-                        <ChatList chats={this.state.chats}/>
+                        <Switch>
+                            <Route path='/'>
+                                <Switch>
+                                    <Route path='/' exact render={ (props) => 
+                                        <Chat 
+                                            {...props}
+                                            chats={this.state.chats} 
+                                            addMessage={this.handleAddMessage} 
+                                            numSelectedChat={this.state.numSelectedChat}
+                                            currentActiveChat={this.state.currentActiveChat} />}
+                                    />
+                                    <Route path='/:id' exact render={(props) => 
+                                        <Chat 
+                                            {...props}
+                                            chats={this.state.chats} 
+                                            addMessage={this.handleAddMessage} 
+                                            numSelectedChat={this.state.numSelectedChat}
+                                            currentActiveChat={this.state.currentActiveChat} />}
+                                    />
+                                    <Route path='/:id' />
+                                </Switch>
+                                {/* <Chat /> */}
+                                <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
+                            </Route>
+                        </Switch>
                     </main>
                 </BrowserRouter>
             </Provider>
