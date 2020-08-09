@@ -1,19 +1,20 @@
 const path = require('path');
+const MiniCss = require('mini-css-extract-plugin');
+const HtmlPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
+    mode: 'development',
     entry: {
-        main: './index.jsx',
+        //точка входа
+        main: path.resolve(__dirname, 'src', 'index.jsx')
     },
-    context: path.resolve(__dirname, "src"),
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                include: path.resolve(__dirname, "src"),
                 loader: 'babel-loader',
-                exclude: /node_modules/,
                 options: {
-                    presets: ['@babel/env'],
                     plugins: [
                         ["@babel/plugin-proposal-class-properties", {"loose": true}]
                     ]
@@ -21,13 +22,23 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader',
+                use: [MiniCss.loader, 'css-loader']
             }
         ]
     },
+    plugins: [
+        new MiniCss({
+            filename: path.join('style', '[name].css'),
+            chunkFilename: '[id].css'
+        }),
+        new HtmlPlugin({
+            filename: 'index.html',
+            template: path.resolve(__dirname, 'public', 'index.html')
+        })
+    ],
     devServer: {
         port: 3000,
-        hot: true,
+        // hot: true,
         open: false
     }
-};
+}

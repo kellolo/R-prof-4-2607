@@ -25,26 +25,3 @@
     color: gray;
     font-size: 14px;
 }
-
-.layout {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: 50px 100%;
-    gap: 1px 1px;
-    grid-template-areas: "header header" "chat-list chat";
-}
-
-.header {
-    grid-area: header;
-    text-align: center;
-    background-color: lightcoral;
-}
-
-.chat-list {
-    grid-area: chat-list;
-    background-color: lightgoldenrodyellow;
-}
-
-.chat {
-    grid-area: chat;
-}

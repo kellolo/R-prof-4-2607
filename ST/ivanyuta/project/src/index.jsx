@@ -1,11 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from './components/Layout.jsx';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import bootstrap from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Router from "./router.jsx";
 
+import { BrowserRouter } from "react-router-dom";
+
+const appContainer = document.querySelector('#app');
 ReactDOM.render(
-    <MuiThemeProvider>
-        <App/>
-    </MuiThemeProvider>,
-    document.getElementById("root")
+    <BrowserRouter>
+        <div className="h-100">
+            <Router />
+        </div>
+    </BrowserRouter>,
+    appContainer
 );
