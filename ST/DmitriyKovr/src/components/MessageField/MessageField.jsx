@@ -65,16 +65,16 @@ export default class MessageField extends Component
         });
         
         return (
-            <div className='layout'>
-                <div id='main' className='message-field'>
+            <div className='layout w-100'>
+                <div id='main' className='message-field h-100'>
                     { messageElements }
                 </div>
             
                 <div style={ { width: '100%', display: 'flex' } }>
                     <TextField
                         name='input'
-                        autoFocus={ true }
-                        fullWidth={ true }
+                        autoFocus
+                        fullWidth
                         helperText='Введите сообщение'
                         type='text'
                         style={ { fontSize: '22px' } }
