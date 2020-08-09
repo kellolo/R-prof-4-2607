@@ -60,7 +60,9 @@ class Chat extends Component {
     }
 
     render() {
-        console.log(this.props, this.props.numSelectedChat)
+        const { chat } = this.props
+        console.log(chat, 'asdasd')
+        // console.log(this.props, 'props', this.props.numSelectedChat)
 
         const { id }  = this.props.match.params
         let Messages = <Typography>No Chats</Typography>
@@ -99,16 +101,18 @@ class Chat extends Component {
     }
 }
 
-const mapStateProps = (store, props) => {
-    const { id } = props.match.params
-    console.log(id)
-    const chat = id && store.chats && store.chats[id] ? store.chats[id] : undefined
-    console.log(store)
-    return {
-        messages: chat ? chat.messages : undefined
-    }
+const mapStateProps = store => {
+    chat: store.chats
+    // const { id } = props.match.params
+    
+    // const chat = id && store.chats && store.chats.chats[idChat] ? store.chats.chats[idChat] : undefined
+
+    // return {
+    //     messages: chat ? chat.messages : undefined,
+    //     chats: chat
+    // }
 }
-const mapDispatchToProps = {
-    getChats: getChatsSuccess,
-}
-export default connect(mapStateProps, mapDispatchToProps)(Chat)
+// const mapDispatchToProps = {
+//     getChats: getChatsSuccess,
+// }
+export default connect(mapStateProps)(Chat)

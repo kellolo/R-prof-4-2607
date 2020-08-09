@@ -34,12 +34,12 @@ export default handleActions({
     },
 
     [sendMessage] : (state, action) => {
-        console.log(state, action)
-        const { id, name, content } = action.payload 
+        console.log(state , 'state')
+        console.log(action, 'action')
 
-        return {
+        const { id, name, content } = action.payload 
+        return { 
             ...state,
-            ...state.chats,
             [id]: {
                 ...state.chats[id],
                 messages: [

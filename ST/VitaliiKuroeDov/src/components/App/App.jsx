@@ -7,11 +7,15 @@ import '../../layout/css/style.css'
 import ChatList from '../ChatList/ChatList'
 import Header from '../Header/Header'
 import Chat from '../Chat/Chat'
-import { initChats } from '../../store/actions/chats'
+import { initChats, sendMessage } from '../../store/actions/chats'
 
 
 const store = initStore()
 store.dispatch(initChats())
+store.dispatch(sendMessage(1, 'oleg', 'asdasd1'))
+store.dispatch(sendMessage(1, 'oleg', 'asdasd2'))
+store.dispatch(sendMessage(1, 'oleg', 'asdasd3'))
+
 
 class App extends Component {
 
