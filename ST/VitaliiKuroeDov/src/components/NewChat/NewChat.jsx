@@ -1,7 +1,8 @@
 import React from 'react'
 import Draggable from 'react-draggable'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, InputLabel, FormControl, MenuItem, Select,
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, 
+    Paper, InputLabel, FormControl, MenuItem, Select, Slide,
     Avatar } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +31,11 @@ const useStyles = makeStyles((theme) => ({
       margin:'0 auto'
     },
   }))
+  
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />
+})
 
 function PaperComponent(props) {
   return (
@@ -102,6 +107,7 @@ export default function NewChat(props) {
         <Dialog
             open={open}
             fullWidth
+            TransitionComponent={Transition}
             onClose={handleClose}
             PaperComponent={PaperComponent}
             aria-labelledby="draggable-dialog-title"

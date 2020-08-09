@@ -37,10 +37,9 @@ module.exports = {
         contentBase: path.join(__dirname, "dist"),
         compress: true,
         port: 9001,
-        historyApiFallback: {
-            index: 'index.html'
-        }
+        historyApiFallback: true
     },
+    devtool: 'inline-source-map',
     plugins: [
         new HtmlWebPackPlugin({
             filename: 'index.html',

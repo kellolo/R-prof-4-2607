@@ -1,40 +1,44 @@
-import React, { Component, Fragment} from 'react'
+import React, { Component } from 'react'
+import { uuid }  from 'uuidv4'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import store from '../../store/store'
+import { initStore } from '../../store/store'
 import '../../layout/css/style.css'
 import ChatList from '../ChatList/ChatList'
 import Header from '../Header/Header'
 import Chat from '../Chat/Chat'
-import RootRouter from '../../pages/RootRouter/RootRouter'
-import { uuid }  from 'uuidv4'
+import { initChats } from '../../store/actions/chats'
+
+
+const store = initStore()
+store.dispatch(initChats())
 
 class App extends Component {
 
     state = {
         title: 'React GB',
-        chats: {
-            0: {
-                id: uuid(),
-                name: '1',
-                messages: [{name: "я", text: "first"}]
-            },
-            1: {
-                id: uuid(),
-                name: '1',
-                messages: [{name: "я", text: "second"}]
-            },
-            2: {
-                id: uuid(),
-                name: '2',
-                messages: [{name: "я", text: "third"}]
-            },
-            3: {
-                id: uuid(),
-                name: '3',
-                messages: [{name: "я", text: "one more"}]
-            }
-        },
+        // chats: {
+        //     0: {
+        //         id: uuid(),
+        //         name: '1',
+        //         messages: [{name: "я", text: "first"}]
+        //     },
+        //     1: {
+        //         id: uuid(),
+        //         name: '1',
+        //         messages: [{name: "я", text: "second"}]
+        //     },
+        //     2: {
+        //         id: uuid(),
+        //         name: '2',
+        //         messages: [{name: "я", text: "third"}]
+        //     },
+        //     3: {
+        //         id: uuid(),
+        //         name: '3',
+        //         messages: [{name: "я", text: "one more"}]
+        //     }
+        // },
         user: {
             firstName: 'Виталий',
             lastName: 'Куроедов',
@@ -43,7 +47,7 @@ class App extends Component {
         },
         currentActiveChat: null,
         currentActiveChatName: null,
-        numSelectedChat: 0,
+        numSelectedChat: 1,
         error: null,
 
         users: {
@@ -145,7 +149,7 @@ class App extends Component {
                         handleNameChange={this.handleNameChange}/>
                     <main>
                         <Switch>
-                            <Route path='/'>
+                            <Route path='/' >
                                 <Switch>
                                     <Route path='/' exact render={ (props) => 
                                         <Chat 
@@ -163,9 +167,8 @@ class App extends Component {
                                             numSelectedChat={this.state.numSelectedChat}
                                             currentActiveChat={this.state.currentActiveChat} />}
                                     />
-                                    <Route path='/:id' />
+                                    {/* <Route path='/:id' /> */}
                                 </Switch>
-                                {/* <Chat /> */}
                                 <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
                             </Route>
                         </Switch>

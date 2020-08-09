@@ -1,13 +1,7 @@
-const GET_CHATS_SUCCESS = 'chats/GET_CHATS_SUCCESS'
-const SEND_MSG = 'message/SEND'
+import { createActions } from 'redux-actions'
 
-const sendMessage = () => ({
-    type: SEND_MESSAGE,
-    payload: [``]
-}) 
-
-const getChatsSuccess = () => ({
-    type: GET_CHATS_SUCCESS,
-    payload: [`${uuid()}`]
+export const { initChats, sendMessage } = createActions({
+    INIT_CHATS: () => ({}),
+    SEND_MESSAGE: (id, name, content) => ({ id, name, content }),
 
 })

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { List } from '@material-ui/core'
 import ChatListItem from '../ChatListItem/ChatListItem'
-export default class ChatList extends Component {
+class ChatList extends Component {
 
     render() {
         const chatsElemet = []
@@ -20,3 +20,5 @@ export default class ChatList extends Component {
         )
     }
 }
+
+export default ChatList
