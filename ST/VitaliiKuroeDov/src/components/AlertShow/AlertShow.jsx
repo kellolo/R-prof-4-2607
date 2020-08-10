@@ -18,13 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlertShow() {
+export default function AlertShow(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
+  const [open, setOpen] = React.useState(props.popoup.status);
+  
   return (
     <div className={classes.root}>
-      <Collapse in={open}>
+      <Collapse in={props.popoup.status}>
         <Alert
           action={
             <IconButton
@@ -32,14 +32,14 @@ export default function AlertShow() {
               color="inherit"
               size="small"
               onClick={() => {
-                setOpen(false);
+                props.hanldeCloseAlert(false);
               }}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
         >
-          Close me!
+          {props.popoup.text}
         </Alert>
       </Collapse>
     </div>

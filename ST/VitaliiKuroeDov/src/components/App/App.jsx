@@ -54,7 +54,7 @@ class App extends Component {
         currentActiveChatName: null,
         numSelectedChat: 1,
         error: null,
-        popoup: false,
+        popoup: {text: '', status: false},
 
         users: {
             1: {name: 'Михаил', avatar: '', id: uuid()},
@@ -75,7 +75,14 @@ class App extends Component {
             16: {name: 'Боря', avatar: '', id: uuid()},
         }
     }
-
+    hanldeCloseAlert = (value) => {
+        this.setState({
+            popoup: {
+                text: '',
+                status: value
+            }
+        })
+    }
     handleNewChat = (data) => {
         const chatsContainer = []
         for (let [key, value] of Object.entries(this.state.chats)) {
@@ -93,6 +100,10 @@ class App extends Component {
                         avatar: data.avatar,
                         messages: []
                     }
+                },
+                popoup: {
+                    text: `добавлен новый чат с "${data.name}"`,
+                    status: true
                 }
             })
         } else {
@@ -174,7 +185,7 @@ class App extends Component {
                                     {/* <Route path='/:id' /> */}
                                 </Switch>
                                 <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
-                                <AlertShow popoup={this.state.popoup}/>
+                                <AlertShow popoup={this.state.popoup} hanldeCloseAlert={this.hanldeCloseAlert}/>
                             </Route>
                         </Switch>
                     </main>
