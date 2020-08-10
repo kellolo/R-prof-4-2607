@@ -60,17 +60,16 @@ class Chat extends Component {
     }
 
     render() {
-        const { chat } = this.props
-        console.log(chat, 'asdasd')
-        // console.log(this.props, 'props', this.props.numSelectedChat)
+        console.log(this.props, 'asdasd')
 
         const { id }  = this.props.match.params
         let Messages = <Typography>No Chats</Typography>
 
-        const currentChat = this.props.chats[this.props.numSelectedChat].messages 
-        if (id !== undefined && this.props.chats) {
-            Messages = this.props.chats[this.props.numSelectedChat].messages.map( (item, index) => <Message key={index} message={item} />)
-        }
+        // const currentChat = this.props.chats[this.props.numSelectedChat].messages 
+        // if (id !== undefined && this.props.chats) {
+        //     Messages = this.props.chats[this.props.numSelectedChat].messages.map( (item, index) => <Message key={index} message={item} />)
+        // }
+
 
         return(
             <section className="chat">
@@ -101,16 +100,16 @@ class Chat extends Component {
     }
 }
 
-const mapStateProps = store => {
-    chat: store.chats
-    // const { id } = props.match.params
-    
-    // const chat = id && store.chats && store.chats.chats[idChat] ? store.chats.chats[idChat] : undefined
-
-    // return {
-    //     messages: chat ? chat.messages : undefined,
-    //     chats: chat
-    // }
+const mapStateProps = (store, props) => {
+    console.log(store.chats, 'chats')
+    const { id } = props.match.params
+    const chat = id && store.chats && store.chats.chats[id] ? store.chats.chats[id] : undefined
+    const chats = store.chats
+    return {
+        messages: chat ? chat.messages : undefined,
+        currentChat: chat,
+        chats : store.chats.chats 
+    }
 }
 // const mapDispatchToProps = {
 //     getChats: getChatsSuccess,

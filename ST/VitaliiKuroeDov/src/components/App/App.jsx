@@ -12,9 +12,9 @@ import { initChats, sendMessage } from '../../store/actions/chats'
 
 const store = initStore()
 store.dispatch(initChats())
-store.dispatch(sendMessage(1, 'oleg', 'asdasd1'))
-store.dispatch(sendMessage(1, 'oleg', 'asdasd2'))
-store.dispatch(sendMessage(1, 'oleg', 'asdasd3'))
+// store.dispatch(sendMessage(1, 'oleg', 'asdasd1'))
+// store.dispatch(sendMessage(1, 'oleg', 'asdasd2'))
+// store.dispatch(sendMessage(1, 'oleg', 'asdasd3'))
 
 
 class App extends Component {
@@ -173,7 +173,7 @@ class App extends Component {
                                     />
                                     {/* <Route path='/:id' /> */}
                                 </Switch>
-                                <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
+                                {/* <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/> */}
                             </Route>
                         </Switch>
                     </main>
