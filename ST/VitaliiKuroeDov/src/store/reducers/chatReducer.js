@@ -37,19 +37,6 @@ export default handleActions({
 
         const { id, name, content } = action.payload
         console.log(state, action)
-        // // console.log(state.chats)
-        // const newState = {
-        //     ...state.chats,
-        //     [id]: {
-        //         ...state.chats[id],
-        //         messages:[
-        //             ...state.chats[id].messages,
-        //             {name, text: content}
-        //         ]
-        //     }
-        // }
-        // // console.log(newState, 'new')
-        // return newState
 
         return {
             ...state,

@@ -7,11 +7,12 @@ import '../../layout/css/style.css'
 import ChatList from '../ChatList/ChatList'
 import Header from '../Header/Header'
 import Chat from '../Chat/Chat'
-// import { initChats, sendMessage } from '../../store/actions/chats'
+import AlertShow from '../AlertShow/AlertShow'
+import { initChats, sendMessage } from '../../store/actions/chats'
 
 
 const store = initStore()
-// store.dispatch(initChats())
+store.dispatch(initChats())
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd1'))
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd2'))
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd3'))
@@ -22,25 +23,25 @@ class App extends Component {
     state = {
         title: 'React GB',
         chats: {
-            0: {
-                id: uuid(),
-                name: '1',
-                messages: [{name: "я", text: "first"}]
-            },
             1: {
                 id: uuid(),
                 name: '1',
-                messages: [{name: "я", text: "second"}]
+                messages: [{name: "я", text: "first", id: uuid() }]
             },
             2: {
                 id: uuid(),
                 name: '2',
-                messages: [{name: "я", text: "third"}]
+                messages: [{name: "я", text: "second", id: uuid() }]
             },
             3: {
                 id: uuid(),
                 name: '3',
-                messages: [{name: "я", text: "one more"}]
+                messages: [{name: "я", text: "third", id: uuid() }]
+            },
+            4: {
+                id: uuid(),
+                name: '4',
+                messages: [{name: "я", text: "one more", id: uuid() }]
             }
         },
         user: {
@@ -53,6 +54,7 @@ class App extends Component {
         currentActiveChatName: null,
         numSelectedChat: 1,
         error: null,
+        popoup: false,
 
         users: {
             1: {name: 'Михаил', avatar: '', id: uuid()},
@@ -80,12 +82,12 @@ class App extends Component {
             chatsContainer.push(value)
         }
         const idNewChat = chatsContainer.find(item => item.id === data.id)
-
+        console.log('id', data.id, 'chatsContainer.id', chatsContainer )
         if(!idNewChat) {
             this.setState({
                 chats: {
                     ...this.state.chats, 
-                    [chatsContainer.length] : {
+                    [chatsContainer.length+1] : {
                         name: data.name,
                         id: data.id,
                         avatar: data.avatar,
@@ -106,10 +108,11 @@ class App extends Component {
     }
 
     handleAddMessage = (content, id) => {
+        
         if (id !== undefined) {
-            
             let idChat = this.state.numSelectedChat
-            if (this.state.chats[idChat].id === id ) {
+
+            if (this.state.chats[idChat].id === id) {
                 this.setState( {
                     chats: { ...this.state.chats,
                         [idChat] : {
@@ -171,6 +174,7 @@ class App extends Component {
                                     {/* <Route path='/:id' /> */}
                                 </Switch>
                                 <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
+                                <AlertShow popoup={this.state.popoup}/>
                             </Route>
                         </Switch>
                     </main>
