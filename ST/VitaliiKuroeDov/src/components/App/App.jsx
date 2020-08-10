@@ -7,11 +7,11 @@ import '../../layout/css/style.css'
 import ChatList from '../ChatList/ChatList'
 import Header from '../Header/Header'
 import Chat from '../Chat/Chat'
-import { initChats, sendMessage } from '../../store/actions/chats'
+// import { initChats, sendMessage } from '../../store/actions/chats'
 
 
 const store = initStore()
-store.dispatch(initChats())
+// store.dispatch(initChats())
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd1'))
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd2'))
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd3'))
@@ -21,28 +21,28 @@ class App extends Component {
 
     state = {
         title: 'React GB',
-        // chats: {
-        //     0: {
-        //         id: uuid(),
-        //         name: '1',
-        //         messages: [{name: "я", text: "first"}]
-        //     },
-        //     1: {
-        //         id: uuid(),
-        //         name: '1',
-        //         messages: [{name: "я", text: "second"}]
-        //     },
-        //     2: {
-        //         id: uuid(),
-        //         name: '2',
-        //         messages: [{name: "я", text: "third"}]
-        //     },
-        //     3: {
-        //         id: uuid(),
-        //         name: '3',
-        //         messages: [{name: "я", text: "one more"}]
-        //     }
-        // },
+        chats: {
+            0: {
+                id: uuid(),
+                name: '1',
+                messages: [{name: "я", text: "first"}]
+            },
+            1: {
+                id: uuid(),
+                name: '1',
+                messages: [{name: "я", text: "second"}]
+            },
+            2: {
+                id: uuid(),
+                name: '2',
+                messages: [{name: "я", text: "third"}]
+            },
+            3: {
+                id: uuid(),
+                name: '3',
+                messages: [{name: "я", text: "one more"}]
+            }
+        },
         user: {
             firstName: 'Виталий',
             lastName: 'Куроедов',
@@ -107,10 +107,7 @@ class App extends Component {
 
     handleAddMessage = (content, id) => {
         if (id !== undefined) {
-            let idGenerator = 1
-            for (let key in this.state.chats ) {
-                idGenerator++
-            }
+            
             let idChat = this.state.numSelectedChat
             if (this.state.chats[idChat].id === id ) {
                 this.setState( {
@@ -173,7 +170,7 @@ class App extends Component {
                                     />
                                     {/* <Route path='/:id' /> */}
                                 </Switch>
-                                {/* <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/> */}
+                                <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
                             </Route>
                         </Switch>
                     </main>

@@ -4,7 +4,6 @@ import { Paper, Button, IconButton, TextField, Typography } from '@material-ui/c
 import SendIcon  from '@material-ui/icons/SendRounded'
 import { connect } from 'react-redux'
 
-import { getChatsSuccess } from '../../store/actions/chats'
 import { uuid } from 'uuidv4'
 class Chat extends Component {
 
@@ -60,15 +59,14 @@ class Chat extends Component {
     }
 
     render() {
-        console.log(this.props, 'asdasd')
 
         const { id }  = this.props.match.params
         let Messages = <Typography>No Chats</Typography>
 
-        // const currentChat = this.props.chats[this.props.numSelectedChat].messages 
-        // if (id !== undefined && this.props.chats) {
-        //     Messages = this.props.chats[this.props.numSelectedChat].messages.map( (item, index) => <Message key={index} message={item} />)
-        // }
+        const currentChat = this.props.chats[this.props.numSelectedChat].messages 
+        if (id !== undefined && this.props.chats) {
+            Messages = this.props.chats[this.props.numSelectedChat].messages.map( (item, index) => <Message key={index} message={item} />)
+        }
 
 
         return(
@@ -114,4 +112,5 @@ const mapStateProps = (store, props) => {
 // const mapDispatchToProps = {
 //     getChats: getChatsSuccess,
 // }
-export default connect(mapStateProps)(Chat)
+// connect(mapStateProps)(Chat)
+export default Chat
