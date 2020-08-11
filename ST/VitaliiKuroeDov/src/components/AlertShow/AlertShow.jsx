@@ -9,14 +9,14 @@ import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
-    bottom: 0,
+    bottom: '1rem',
     right: '2rem',
-    width: '40%',
+    width: '60%',
     '& > * + *': {
       marginTop: theme.spacing(2),
     },
   },
-}));
+}))
 
 export default function AlertShow(props) {
   const classes = useStyles();
@@ -25,7 +25,9 @@ export default function AlertShow(props) {
   return (
     <div className={classes.root}>
       <Collapse in={props.popoup.status}>
-        <Alert
+        <Alert 
+          variant="filled" 
+          severity="success"
           action={
             <IconButton
               aria-label="close"
@@ -43,5 +45,5 @@ export default function AlertShow(props) {
         </Alert>
       </Collapse>
     </div>
-  );
+  )
 }

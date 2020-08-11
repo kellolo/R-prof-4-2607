@@ -75,6 +75,8 @@ class App extends Component {
             16: {name: 'Боря', avatar: '', id: uuid()},
         }
     }
+    timeoutID = null
+
     hanldeCloseAlert = (value) => {
         this.setState({
             popoup: {
@@ -83,6 +85,17 @@ class App extends Component {
             }
         })
     }
+  
+    handleAlert = (value) => {
+        this.setState({
+            popoup: {
+                text: value,
+                status: true,
+            }
+        }, () => setTimeout( () => this.hanldeCloseAlert(false), 4000 ))// закрытие по таймеру
+        
+    }
+
     handleNewChat = (data) => {
         const chatsContainer = []
         for (let [key, value] of Object.entries(this.state.chats)) {
@@ -101,11 +114,7 @@ class App extends Component {
                         messages: []
                     }
                 },
-                popoup: {
-                    text: `добавлен новый чат с "${data.name}"`,
-                    status: true
-                }
-            })
+            }, this.handleAlert(`добавлен новый чат с "${data.name}"`))
         } else {
             this.setState({error: 'chat is exists'})
         }
@@ -115,7 +124,7 @@ class App extends Component {
     handleNameChange = (data) => {
         this.setState({
             user: {...this.state.user, firstName: data.firstName, lastName: data.lastName}
-        })
+        }, this.handleAlert(`Изменения сохраненны`))
     }
 
     handleAddMessage = (content, id) => {
