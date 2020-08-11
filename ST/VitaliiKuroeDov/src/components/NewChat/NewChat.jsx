@@ -97,7 +97,7 @@ export default function NewChat(props) {
         setSelectedUser({
             id: searchUser.id,
             name: searchUser.name,
-            avatar: searchUser.avatar === '' ? searchUser.name : searchUser.avatar
+            avatar: searchUser.avatar === '' ? `https://i.pravatar.cc/150?img=${selectedUser.id}` : searchUser.avatar
         })
     }
     
@@ -120,7 +120,7 @@ export default function NewChat(props) {
           
         </DialogTitle>
         <DialogContent onKeyUp={handleKeyUp}>
-            <Avatar className="avatar" className={classes.large} > {selectedUser.avatar} </Avatar>
+            <Avatar className="avatar" className={classes.large} src={selectedUser.avatar} />
             <FormControl className={classes.formControl} fullWidth>
                 <InputLabel shrink htmlFor="age-native-label-placeholder">
                     Select user

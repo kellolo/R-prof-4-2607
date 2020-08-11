@@ -63,10 +63,15 @@ class Chat extends Component {
 
         const { id }  = this.props.match.params
         let Messages = <Typography>No Chats</Typography>
-
+        const avatar = this.props.chats[this.props.numSelectedChat].id
         const currentChat = this.props.chats[this.props.numSelectedChat].messages 
         if (id !== undefined && this.props.chats) {
-            Messages = currentChat.map( (item, index) => <Message key={index} message={item} />)
+            Messages = currentChat.map( (item) => 
+                <Message 
+                    key={item.id} 
+                    avatar={avatar} 
+                    handleAlert={this.props.handleAlert} 
+                    message={item} />)
         }
 
         return(

@@ -14,7 +14,13 @@ class ChatList extends Component {
         return(
             <aside className="chat-list">
                 <List dense className="">
-                    {chatsElemet.map((item) => <ChatListItem key={item.id} {...item} selectChat={this.props.selectChat} />)}
+                    {chatsElemet.map((item) => 
+                        <ChatListItem 
+                            key={item.id} 
+                            {...item} 
+                            selectChat={this.props.selectChat} 
+                            selected={this.props.currentActiveChat}/>
+                    )}
                 </List>
             </aside>
         )

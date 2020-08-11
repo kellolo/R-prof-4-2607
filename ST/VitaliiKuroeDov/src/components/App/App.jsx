@@ -26,27 +26,32 @@ class App extends Component {
             1: {
                 id: uuid(),
                 name: '1',
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
                 messages: [{name: "я", text: "first", id: uuid() }]
             },
             2: {
                 id: uuid(),
                 name: '2',
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
                 messages: [{name: "я", text: "second", id: uuid() }]
             },
             3: {
                 id: uuid(),
                 name: '3',
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
                 messages: [{name: "я", text: "third", id: uuid() }]
             },
             4: {
                 id: uuid(),
                 name: '4',
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
                 messages: [{name: "я", text: "one more", id: uuid() }]
             }
         },
         user: {
             firstName: 'Виталий',
             lastName: 'Куроедов',
+            avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
             email: 'wilde@bk.ru',
             age: '31'
         },
@@ -86,14 +91,30 @@ class App extends Component {
         })
     }
   
-    handleAlert = (value) => {
+    handleAlert = (value, type, id = uuid()) => {
+        let alertType = type
+        let status = true
+
+        switch (type) {
+            case 'message alert':
+                alertType = type
+                status = id.status
+                break;
+        
+            default: 'inform'
+                alertType = type
+                break;
+        }
+
         this.setState({
             popoup: {
                 text: value,
-                status: true,
+                status: status,
+                type: alertType,
+                id: id.id,
+                isSelect: id.isSelect,
             }
-        }, () => setTimeout( () => this.hanldeCloseAlert(false), 4000 ))// закрытие по таймеру
-        
+        }, () => alertType === 'inform' ? setTimeout( () => this.hanldeCloseAlert(false), 4000 ) : null )// закрытие по таймеру
     }
 
     handleNewChat = (data) => {
@@ -102,7 +123,6 @@ class App extends Component {
             chatsContainer.push(value)
         }
         const idNewChat = chatsContainer.find(item => item.id === data.id)
-        console.log('id', data.id, 'chatsContainer.id', chatsContainer )
         if(!idNewChat) {
             this.setState({
                 chats: {
@@ -118,13 +138,33 @@ class App extends Component {
         } else {
             this.setState({error: 'chat is exists'})
         }
-        
     }
 
     handleNameChange = (data) => {
         this.setState({
             user: {...this.state.user, firstName: data.firstName, lastName: data.lastName}
         }, this.handleAlert(`Изменения сохраненны`))
+    }
+
+    handleDeleteMessage = (value) => {
+        const chat = this.state.numSelectedChat
+        const messages = this.state.chats[chat].messages
+        const filterMessage = messages.filter(item => item.id !== value.id)
+        
+        this.setState({
+            chats: { 
+                ...this.state.chats,
+                [chat] : {
+                    ...this.state.chats[chat],
+                    messages: filterMessage
+                }
+            },
+            popoup: {
+                ...this.state.popoup,
+                isSelect: value.isSelect,
+                status: value.isSelect
+            }
+        }, () => this.handleAlert(`Сообщение удалено`, 'inform'))
     }
 
     handleAddMessage = (content, id) => {
@@ -178,6 +218,7 @@ class App extends Component {
                                     <Route path='/' exact render={ (props) => 
                                         <Chat 
                                             {...props}
+                                            handleAlert={this.handleAlert}
                                             chats={this.state.chats} 
                                             addMessage={this.handleAddMessage} 
                                             numSelectedChat={this.state.numSelectedChat}
@@ -186,6 +227,7 @@ class App extends Component {
                                     <Route path='/:id' exact render={(props) => 
                                         <Chat 
                                             {...props}
+                                            handleAlert={this.handleAlert}
                                             chats={this.state.chats} 
                                             addMessage={this.handleAddMessage} 
                                             numSelectedChat={this.state.numSelectedChat}
@@ -193,8 +235,14 @@ class App extends Component {
                                     />
                                     {/* <Route path='/:id' /> */}
                                 </Switch>
-                                <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
-                                <AlertShow popoup={this.state.popoup} hanldeCloseAlert={this.hanldeCloseAlert}/>
+                                <ChatList 
+                                    chats={this.state.chats} 
+                                    selectChat={this.handleCurrentChatName} 
+                                    currentActiveChat={this.state.currentActiveChat}/>
+                                <AlertShow 
+                                    handleDeleteMessage={this.handleDeleteMessage}
+                                    popoup={this.state.popoup} 
+                                    hanldeCloseAlert={this.hanldeCloseAlert}/>
                             </Route>
                         </Switch>
                     </main>

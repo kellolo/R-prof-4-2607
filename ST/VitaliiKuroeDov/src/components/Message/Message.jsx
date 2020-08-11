@@ -5,8 +5,18 @@ import DoneIcon from '@material-ui/icons/Done'
 
 export default class Message extends Component {
 
+    state = {
+        isSelectMessage: false,
+    }
+
     handleDelete = () => {
-        console.log('dfs')
+        this.setState({isSelectMessage: !this.state.isSelectMessage})
+
+        this.props.handleAlert(
+            `выбрано сообщение ${this.props.message.name} : ${this.props.message.text}`, 
+            'message alert',
+            { id: this.props.message.id, isSelect: false, status: !this.state.isSelectMessage }
+        )
     }
     
     static propTypes = {
@@ -22,15 +32,17 @@ export default class Message extends Component {
                 deleteIcon={<DoneIcon />} 
                 color="primary" 
                 className="me" 
+                clicable
                 onDelete={this.handleDelete} 
                 label={this.props.message.text}
                 avatar={<Avatar>{this.props.message.name}</Avatar>} />:
             <Chip 
                 deleteIcon={<DoneIcon />} 
                 color="secondary"
+                clicable
                 label={this.props.message.text}
                 onDelete={this.handleDelete} 
-                avatar={<Avatar>{this.props.message.name}</Avatar>} />
+                avatar={<Avatar src={`https://i.pravatar.cc/150?img=${this.props.avatar}`}></Avatar>} />
         return(
             <div className="message-block"> 
                 { message }

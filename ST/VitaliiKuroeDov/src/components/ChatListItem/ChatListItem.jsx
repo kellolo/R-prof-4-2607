@@ -10,10 +10,10 @@ export default class ChatListItem extends Component {
 
     render() {
         return(
-            <Link to={`/${this.props.id}`} replace>
-                <ListItem button onClick={this.handleSelectChat}>
+            <Link className="link" to={`/${this.props.id}`} replace>
+                <ListItem button onClick={this.handleSelectChat} selected={this.props.selected === this.props.id}>
                     <ListItemIcon>
-                        <Avatar>{this.props.avatar}</Avatar>
+                        <Avatar src={this.props.avatar}></Avatar>
                     </ListItemIcon>
                     <ListItemText primary={this.props.name} />
                 </ListItem>  
