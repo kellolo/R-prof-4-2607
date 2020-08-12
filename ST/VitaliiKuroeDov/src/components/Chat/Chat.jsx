@@ -3,6 +3,7 @@ import Message from '../Message/Message'
 import { Paper, Button, IconButton, TextField, Typography } from '@material-ui/core' 
 import SendIcon  from '@material-ui/icons/SendRounded'
 import { connect } from 'react-redux'
+import { sendMessage } from '../../store/actions/chats'
 
 import { uuid } from 'uuidv4'
 class Chat extends Component {
@@ -62,12 +63,16 @@ class Chat extends Component {
 
         const { id }  = this.props.match.params
         let Messages = <Typography>No Chats</Typography>
-
+        const avatar = this.props.chats[this.props.numSelectedChat].id
         const currentChat = this.props.chats[this.props.numSelectedChat].messages 
         if (id !== undefined && this.props.chats) {
-            Messages = this.props.chats[this.props.numSelectedChat].messages.map( (item, index) => <Message key={index} message={item} />)
+            Messages = currentChat.map( (item) => 
+                <Message 
+                    key={item.id} 
+                    avatar={avatar} 
+                    handleAlert={this.props.handleAlert} 
+                    message={item} />)
         }
-
 
         return(
             <section className="chat">
@@ -98,19 +103,18 @@ class Chat extends Component {
     }
 }
 
-const mapStateProps = (store, props) => {
-    console.log(store.chats, 'chats')
-    const { id } = props.match.params
-    const chat = id && store.chats && store.chats.chats[id] ? store.chats.chats[id] : undefined
-    const chats = store.chats
-    return {
-        messages: chat ? chat.messages : undefined,
-        currentChat: chat,
-        chats : store.chats.chats 
-    }
-}
+// const mapStateProps = (store, props) => {
+//     console.log(store.chats, 'chats')
+//     const { id } = props.match.params
+//     const chat = id && store.chats && store.chats.chats[id] ? store.chats.chats[id] : undefined
+//     return {
+//         messages: chat ? chat.messages : undefined,
+//         currentChat: chat,
+//         chats : store.chats.chats 
+//     }
+// }
 // const mapDispatchToProps = {
-//     getChats: getChatsSuccess,
+//     sendMessage: sendMessage,
 // }
 // connect(mapStateProps)(Chat)
 export default Chat

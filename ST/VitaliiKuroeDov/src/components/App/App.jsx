@@ -7,11 +7,12 @@ import '../../layout/css/style.css'
 import ChatList from '../ChatList/ChatList'
 import Header from '../Header/Header'
 import Chat from '../Chat/Chat'
-// import { initChats, sendMessage } from '../../store/actions/chats'
+import AlertShow from '../AlertShow/AlertShow'
+import { initChats, sendMessage } from '../../store/actions/chats'
 
 
 const store = initStore()
-// store.dispatch(initChats())
+store.dispatch(initChats())
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd1'))
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd2'))
 // store.dispatch(sendMessage(1, 'oleg', 'asdasd3'))
@@ -22,30 +23,35 @@ class App extends Component {
     state = {
         title: 'React GB',
         chats: {
-            0: {
-                id: uuid(),
-                name: '1',
-                messages: [{name: "я", text: "first"}]
-            },
             1: {
                 id: uuid(),
                 name: '1',
-                messages: [{name: "я", text: "second"}]
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
+                messages: [{name: "я", text: "first", id: uuid() }]
             },
             2: {
                 id: uuid(),
                 name: '2',
-                messages: [{name: "я", text: "third"}]
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
+                messages: [{name: "я", text: "second", id: uuid() }]
             },
             3: {
                 id: uuid(),
                 name: '3',
-                messages: [{name: "я", text: "one more"}]
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
+                messages: [{name: "я", text: "third", id: uuid() }]
+            },
+            4: {
+                id: uuid(),
+                name: '4',
+                avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
+                messages: [{name: "я", text: "one more", id: uuid() }]
             }
         },
         user: {
             firstName: 'Виталий',
             lastName: 'Куроедов',
+            avatar: `https://i.pravatar.cc/150?img=${uuid()}`,
             email: 'wilde@bk.ru',
             age: '31'
         },
@@ -53,6 +59,7 @@ class App extends Component {
         currentActiveChatName: null,
         numSelectedChat: 1,
         error: null,
+        popoup: {text: '', status: false},
 
         users: {
             1: {name: 'Михаил', avatar: '', id: uuid()},
@@ -73,6 +80,42 @@ class App extends Component {
             16: {name: 'Боря', avatar: '', id: uuid()},
         }
     }
+    timeoutID = null
+
+    hanldeCloseAlert = (value) => {
+        this.setState({
+            popoup: {
+                text: '',
+                status: value
+            }
+        })
+    }
+  
+    handleAlert = (value, type, id = uuid()) => {
+        let alertType = type
+        let status = true
+
+        switch (type) {
+            case 'message alert':
+                alertType = type
+                status = id.status
+                break;
+        
+            default: 'inform'
+                alertType = type
+                break;
+        }
+
+        this.setState({
+            popoup: {
+                text: value,
+                status: status,
+                type: alertType,
+                id: id.id,
+                isSelect: id.isSelect,
+            }
+        }, () => alertType === 'inform' ? setTimeout( () => this.hanldeCloseAlert(false), 4000 ) : null )// закрытие по таймеру
+    }
 
     handleNewChat = (data) => {
         const chatsContainer = []
@@ -80,36 +123,56 @@ class App extends Component {
             chatsContainer.push(value)
         }
         const idNewChat = chatsContainer.find(item => item.id === data.id)
-
         if(!idNewChat) {
             this.setState({
                 chats: {
                     ...this.state.chats, 
-                    [chatsContainer.length] : {
+                    [chatsContainer.length+1] : {
                         name: data.name,
                         id: data.id,
                         avatar: data.avatar,
                         messages: []
                     }
-                }
-            })
+                },
+            }, this.handleAlert(`добавлен новый чат с "${data.name}"`))
         } else {
             this.setState({error: 'chat is exists'})
         }
-        
     }
 
     handleNameChange = (data) => {
         this.setState({
             user: {...this.state.user, firstName: data.firstName, lastName: data.lastName}
-        })
+        }, this.handleAlert(`Изменения сохраненны`))
+    }
+
+    handleDeleteMessage = (value) => {
+        const chat = this.state.numSelectedChat
+        const messages = this.state.chats[chat].messages
+        const filterMessage = messages.filter(item => item.id !== value.id)
+        
+        this.setState({
+            chats: { 
+                ...this.state.chats,
+                [chat] : {
+                    ...this.state.chats[chat],
+                    messages: filterMessage
+                }
+            },
+            popoup: {
+                ...this.state.popoup,
+                isSelect: value.isSelect,
+                status: value.isSelect
+            }
+        }, () => this.handleAlert(`Сообщение удалено`, 'inform'))
     }
 
     handleAddMessage = (content, id) => {
+        
         if (id !== undefined) {
-            
             let idChat = this.state.numSelectedChat
-            if (this.state.chats[idChat].id === id ) {
+
+            if (this.state.chats[idChat].id === id) {
                 this.setState( {
                     chats: { ...this.state.chats,
                         [idChat] : {
@@ -155,6 +218,7 @@ class App extends Component {
                                     <Route path='/' exact render={ (props) => 
                                         <Chat 
                                             {...props}
+                                            handleAlert={this.handleAlert}
                                             chats={this.state.chats} 
                                             addMessage={this.handleAddMessage} 
                                             numSelectedChat={this.state.numSelectedChat}
@@ -163,6 +227,7 @@ class App extends Component {
                                     <Route path='/:id' exact render={(props) => 
                                         <Chat 
                                             {...props}
+                                            handleAlert={this.handleAlert}
                                             chats={this.state.chats} 
                                             addMessage={this.handleAddMessage} 
                                             numSelectedChat={this.state.numSelectedChat}
@@ -170,7 +235,14 @@ class App extends Component {
                                     />
                                     {/* <Route path='/:id' /> */}
                                 </Switch>
-                                <ChatList chats={this.state.chats} selectChat={this.handleCurrentChatName}/>
+                                <ChatList 
+                                    chats={this.state.chats} 
+                                    selectChat={this.handleCurrentChatName} 
+                                    currentActiveChat={this.state.currentActiveChat}/>
+                                <AlertShow 
+                                    handleDeleteMessage={this.handleDeleteMessage}
+                                    popoup={this.state.popoup} 
+                                    hanldeCloseAlert={this.hanldeCloseAlert}/>
                             </Route>
                         </Switch>
                     </main>
