@@ -5,32 +5,41 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import Avatar from "@material-ui/core/Avatar";
 
-export default class ChatList extends Component {
+class ChatList extends Component {
     render() {
-        return (
-            <List subheader={<ListSubheader>Recent chats</ListSubheader>}>
-                    <ListItem button component={Link} to="/chat/1/">
-                        <ListItemAvatar>
-                            <Avatar>FP</Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary="First Person"
-                            secondary="Jan 9, 2014"
-                        />
-                    </ListItem>
-                <ListItem button component={Link} to="/chat/2/">
+        const { chats } = this.props;
+        const listItems = Object.keys(chats).map(id => {
+            const chat = chats[id];
+            const to = "/chat/" + chat.id + "/";
+            return (
+                <ListItem key={id} button component={Link} to={to}>
                     <ListItemAvatar>
-                        <Avatar>SP</Avatar>
+                        <Avatar>FP</Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                        primary="Second Person"
-                        secondary="Jan 9, 2014"
+                        primary={chat.title}
+                        secondary={chat.person}
                     />
                 </ListItem>
+            );
+        });
+        return (
+            <List subheader={<ListSubheader>Recent chats</ListSubheader>}>
+                {listItems}
             </List>
         );
     }
 }
+
+const mapStateToProps = ({ chat_reducer }) => ({
+    chats: chat_reducer.chats
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

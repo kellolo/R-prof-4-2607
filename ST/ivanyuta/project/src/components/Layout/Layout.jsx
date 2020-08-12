@@ -13,34 +13,8 @@ export default class Layout extends Component {
     static defaultProps = {
         chatId: "1"
     };
-    state = {
-        messages: {
-            1: [
-                {
-                    sender: "M'r Robot",
-                    text: "First chat!"
-                },
-                {
-                    sender: "M'r Robot",
-                    text: "How are you?"
-                }
-            ],
-            2: [
-                {
-                    sender: "M'r Robot",
-                    text: "Second chat!"
-                },
-                {
-                    sender: "M'r Robot",
-                    text: "How are you?"
-                }
-            ]
-        }
-    };
-
     render() {
         let { chatId } = this.props;
-        let messages = this.state.messages[chatId];
 
         return (
             <div className="h-100">
@@ -50,10 +24,19 @@ export default class Layout extends Component {
                         <ChatList />
                     </div>
                     <div className="w-75 border">
-                        <MessageField messages={messages} />
+                        <MessageField chatId= {chatId} />
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+// const mapStateToProps = ({ chat_reducer }) => ({
+//     messages: msg_reducer.messages
+// });
+
+// const mapDispatchToProps = dispatch =>
+//     bindActionCreators({ sendMessage }, dispatch);
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Layout);

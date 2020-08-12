@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 
-import { TextField } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-
 import Message from "../Message/Message.jsx";
 
-export default class MessageField extends Component {
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { sendMessage } from "../../store/actions/msg_action";
+
+
+class MessageField extends Component {
     state = {
-        messages: {},
         text: "",
         answered: true
     };
@@ -17,23 +18,10 @@ export default class MessageField extends Component {
         this.state.messages = this.props.messages;
     }
 
+
     handleSend = () => {
-        let { text } = this.state;
-
-        this.sendMessage(text, "Me");
-    };
-
-    sendMessage = (text, sender) => {
-        let { messages } = this.state;
-        this.setState({
-            messages: [...messages, { text, sender }],
-            text: ""
-        });
-        if (sender == "Me") {
-            this.setState({ answered: false });
-        } else {
-            this.setState({ answered: true });
-        }
+        let { text } = this.state; const id = Object.keys(this.props.messages).length + 1;
+        this.props.sendMessage(this.props.chatId, id, 'Me', text);
     };
 
     handleChange = event => {
@@ -48,14 +36,17 @@ export default class MessageField extends Component {
         if (this.state.messages != this.props.messages) {
             this.setState({ messages: this.props.messages });
         }
-        if (!this.state.answered) {
-            this.sendMessage("Leave me alone", "M'r Robot");
-        }
     }
 
     render() {
-        const messageElements = this.state.messages.map((message, index) => (
-            <Message key={index} text={message.text} sender={message.sender} />
+        let { messages } = this.props;
+
+        const messageElements = Object.keys(messages).map(id => (
+            <Message
+                key={id}
+                text={messages[id].text}
+                sender={messages[id].sender}
+            />
         ));
 
         return (
@@ -71,3 +62,17 @@ export default class MessageField extends Component {
         );
     }
 }
+
+const mapStateToProps = ({ msg_reducer }, ownProps ) =>  {
+    const { chatId } = ownProps;
+    const  messages = msg_reducer.getChatMessages(chatId);
+    return ({
+        messages:  messages,
+
+    });
+} ;
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ sendMessage }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
