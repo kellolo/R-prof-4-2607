@@ -6,17 +6,14 @@ module.exports = {
     entry: {
         main: path.resolve(__dirname, 'src', 'index.jsx')
     },
-    /*
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'main.js',
-        publicPath: '/',
-    },
-    */
+   
     resolve: {
         modules: [ `${__dirname}/src/components`, 'node_modules'],
         extensions: ['.js', '.jsx'],
     },
+    
+    devtool: 'cheap-inline-module-source-map',
+    
     module: {
         rules: [
             {
@@ -47,6 +44,6 @@ module.exports = {
     devServer: {
         port: 3000,
         hot: true,
-        open: false
+        open: false,
     }
 }
