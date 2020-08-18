@@ -7,19 +7,19 @@ import './style.css';
 
 import connect from 'react-redux/es/connect/connect';
 import { bindActionCreators } from 'redux';
-import { sendMessage } from '../../store/actions/messageActions.js';
+//import { sendMessage } from '../../store/actions/messageActions.js';
 
 class Layout extends Component
 {
     static propTypes = {
         chatId: PropTypes.number,
-        sendMessage: PropTypes.func.isRequired,
+        //sendMessage: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         chatId: 1,
     };
-
+/*
     state = {
         messages: {
             1: { text:'Привет!', sender: 'bot' },
@@ -34,9 +34,10 @@ class Layout extends Component
         if (Object.keys(prevState.messages).length < Object.keys(messages).length &&
            Object.values(messages)[Object.values(messages).length - 1].sender === 'me')
         {
-            setTimeout(() => this.sendMessage('Не приставай ко мне, я робот!', 'bot'), 1000);
+            setTimeout(() => this.sendMessage('Не приставай ко мне, я бот!', 'bot'), 1000);
         }
     }
+
 
     sendMessage = (message, sender) => {
         const { messages } = this.state;
@@ -51,20 +52,18 @@ class Layout extends Component
         
         this.props.sendMessage(messageId, message, sender, chatId);
     };
+*/
     
     render() {
+        const { chatId } = this.props;
         return ([
-            <Header key='header' chatId={ this.props.chatId } />,
+            <Header key='header' chatId={ chatId } />,
             <div key='Layout' className='row justify-content-around h-75'>
                 <div className='col-md-4 border'>
-                    <ChatList />
+                    <ChatList chatId={ chatId } />
                 </div>
                 <div className='col-md-7 border'>
-                    <MessageField 
-                        chatId={ this.props.chatId }
-                        messages={ this.state.messages }
-                        sendMessage={ this.sendMessage }
-                    />
+                    <MessageField chatId={ chatId } />
                 </div>
             </div>
         ])
@@ -73,6 +72,7 @@ class Layout extends Component
 
 const mapStateToProps = ({}) => ({});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ sendMessage }, dispatch);
+//const mapDispatchToProps = (dispatch) => bindActionCreators({ sendMessage }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

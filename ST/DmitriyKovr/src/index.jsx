@@ -7,13 +7,16 @@ import Layout from './components/Layout/Layout.jsx';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 
-import { BrowserRouter } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import Router from './router.jsx';
 
 import { Provider } from 'react-redux';
-import initStore from './store/store.js';
+import { initStore, history } from './store/store.js';
+
+import { PersistGate } from 'redux-persist/integration/react';
 
 const appContainer = document.querySelector('#app');
+const { store, persistor } = initStore();
 //const theme = {};
 
 let theme = createMuiTheme();
@@ -21,14 +24,19 @@ let theme = createMuiTheme();
 
 
 ReactDom.render(
-    <Provider store={ initStore() }>
-        <BrowserRouter>
-            <ThemeProvider theme={ theme }>
-                <div className='h-100 w-100'>
-                    <Router />
-                </div>
-            </ThemeProvider>
-        </BrowserRouter>
+    <Provider store={ store }>
+        <PersistGate
+            loading={ null }
+            persistor={ persistor }
+        >
+            <ConnectedRouter history={ history }>
+                <ThemeProvider theme={ theme }>
+                    <div className='h-100 w-100'>
+                        <Router />
+                    </div>
+                </ThemeProvider>
+            </ConnectedRouter>
+        </PersistGate>
     </Provider> 
     ,appContainer
 );

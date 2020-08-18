@@ -7,19 +7,26 @@ const initialStore = {
     chats: {
         1: {title: 'Чат 1', messageList: [1]},
         2: {title: 'Чат 2', messageList: [2]},
-        3: {title: 'Чат 3', messageList: []},
+    },
+    messages: {
+        1: { text: 'Привет!', sender: 'bot' },
+        2: { text: 'Как дела?', sender: 'bot' },
     },
 };
 
-export default function chatReducer(store = initialStore, action)
+export default function messageReducer(store = initialStore, action)
 {
     switch (action.type) {
         case SEND_MESSAGE: {
-            const { chatId, messageId } = action;
+            const { messageId, text, sender, chatId } = action;
             return update(store, {
                 chats: { $merge: { [chatId]: { 
                     title: store.chats[chatId].title,
                     messageList: [...store.chats[chatId].messageList, messageId],
+                }}},
+                messages: { $merge: { [messageId]: {
+                    text: text,
+                    sender: sender,
                 }}},
             });
         }
