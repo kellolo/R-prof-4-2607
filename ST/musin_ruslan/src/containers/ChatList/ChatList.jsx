@@ -43,7 +43,7 @@ class ChatList extends React.Component {
             <Link key={ chatId } to={ `/chat/${chatId}` }>
                 <ListItem
                 primaryText={ chats[chatId].title}
-                rightIcon={<CommunicationChatBubble />}
+                // rightIcon={<CommunicationChatBubble />}
                 />
             </Link>
         ));
@@ -71,8 +71,9 @@ class ChatList extends React.Component {
     }
 }
 
-const mapStateToProps = ({ chatReducer }) => ({
+const mapStateToProps = ({ chatReducer, messageReducer }) => ({
     chats: chatReducer.chats,
+    messages: messageReducer.messages,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ addChat },

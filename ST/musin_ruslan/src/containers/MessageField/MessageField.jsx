@@ -5,15 +5,15 @@ import connect from "react-redux/es/connect/connect";
 import { TextField, FloatingActionButton } from "material-ui"
 import SendIcon from "material-ui/svg-icons/content/send"
 import Message from "../../components/Message";
-import "./style.css"
+import { sendMessage } from "../../Actions/messageActions";
+import { addMessage } from "../../Actions/addMessage";
+import "./style.css";
 
 
 class MessageField extends React.Component {
     static propTypes = {
-        chatId: PropTypes.number.isRequired,
         messages: PropTypes.object.isRequired,
-        chats: PropTypes.object.isRequired,
-        sendMessage: PropTypes.func.isRequired,
+        chatId: PropTypes.number.isRequired,
     };
 
     state = {
@@ -27,14 +27,16 @@ class MessageField extends React.Component {
 
     handleKeyUP = (event) => {
         if (event.keyCode === 13) {
-            this.handleSendMessage(this.state.input, "'mr7282'")
+            this.handleSendMessage(this.props.chatId, this.state.input, "'mr7282'")
         }
     };
 
 
-    handleSendMessage = (message, author) => {
+    handleSendMessage = (chatId, text, author, ) => {
         if (this.state.input.length > 0 || author === "'robot'") {
-            this.props.sendMessage(message, author);
+            const addMessageId = Object.keys(this.props.messages).length + 1
+            this.props.addMessage(chatId, addMessageId);
+            this.props.sendMessage(text, author);
         }
 
         if (author === "'mr7282'") {
@@ -43,9 +45,12 @@ class MessageField extends React.Component {
     };
 
     render() {
-        const { chatId, messages, chats } = this.props;
+        const {messages} = this.props;
+        const { chats } = this.props;
+        const messagesArr = chats[this.props.chatId].messageList;
+        console.log(messagesArr)
 
-        const messageElements = chats[chatId].messageList.map( messageId => (
+        const messageElements = messagesArr.map( messageId => (
             <Message
                 key={ messageId }
                 text={ messages[messageId].text }
@@ -66,7 +71,7 @@ class MessageField extends React.Component {
                             value={ this.state.input }
                             onKeyUp={ this.handleKeyUP }
                         />
-                        <FloatingActionButton onClick={ () => this.handleSendMessage(this.state.input, "'mr7282'") }>
+                        <FloatingActionButton onClick={ () => this.handleSendMessage(this.props.chatId, this.state.input, "'mr7282'") }>
                             <SendIcon />
                         </FloatingActionButton>
                     </div>
@@ -75,10 +80,11 @@ class MessageField extends React.Component {
     }
 }
 
-const mapStateToProps = ({ chatReducer }) => ({
+const mapStateToProps = ({ messageReducer, chatReducer }) => ({
+    messages: messageReducer.messages,
     chats: chatReducer.chats,
  });
 
- const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+ const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, addMessage }, dispatch);
 
  export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
