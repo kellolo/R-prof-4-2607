@@ -7,13 +7,14 @@ import './style.css';
 
 import connect from 'react-redux/es/connect/connect';
 import { bindActionCreators } from 'redux';
+import { sendMessage } from '../../store/actions/messageActions.js'
 
 class MessageField extends Component
 {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
-        messages: PropTypes.object.isRequired,
-        chats: PropTypes.object.isRequired,
+//        messages: PropTypes.object.isRequired,
+//        chats: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
     }
             
@@ -36,7 +37,8 @@ class MessageField extends Component
         const { input } = this.state;
         
         if (input.length > 0 || sender === 'bot') {
-            this.props.sendMessage(message, sender);
+            const id = Object.keys(this.props.messages).length + 1;
+            this.props.sendMessage(id, message, sender, this.props.chatId);
         }
             
         if (sender === 'me') {
@@ -46,6 +48,7 @@ class MessageField extends Component
 
     render()
     {
+        //const { chatId, messages, chats } = this.props;
         const { chatId, messages, chats } = this.props;
         /*
         const messageElements = messages.map((message, idx) => {
@@ -53,6 +56,7 @@ class MessageField extends Component
             return ( <Message { ...props } /> );
         });
         */
+        //console.log(messages);
         const messageElements = chats[chatId].messageList.map((messageId) => (
             <Message
                 key={ messageId }
@@ -90,8 +94,13 @@ class MessageField extends Component
     }
 }
 
-const mapStateToProps = ({ chatReducer }) => ({ chats: chatReducer.chats });
+const mapStateToProps = ({ messageReducer }) => ({ 
+    chats: messageReducer.chats,
+    messages: messageReducer.messages,
+});
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+    sendMessage,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
