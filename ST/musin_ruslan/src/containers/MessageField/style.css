@@ -1,0 +1,9 @@
+.message-field {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    padding: 20px;
+    background-color: rgba(161, 93, 29, 0.171);
+    border-bottom-left-radius: 10px;
+    overflow-y: scroll;
+}
