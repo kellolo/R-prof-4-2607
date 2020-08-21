@@ -13,26 +13,11 @@ const persistConfig = {
     key: 'geekmessanger',
     storage,
     stateReconciler: autoMergeLevel2,
-    whitelist: ['messageReducer'],
+    whitelist: [],
 };
 
 
 export const history = createBrowserHistory();
-
-/*
-export function initStore() {
-    const initialStore = {};
-    
-    return createStore(
-        initReducers(history),
-        initialStore,
-        compose(
-            applyMiddleware(routerMiddleware(history), ...middlewares),
-            //window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : () => {},
-        )
-    );
-}
-*/
 
 export function initStore()
 {

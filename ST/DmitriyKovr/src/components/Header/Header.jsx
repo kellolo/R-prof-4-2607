@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import { TextField, Fab as FloatingActionButton } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import Message from '../Message/Message';
@@ -6,21 +7,34 @@ import './style.css';
 
 import connect from 'react-redux/es/connect/connect';
 import { bindActionCreators } from 'redux';
-import { addChat } from '../../store/actions/chatActions.js';
 
 class Header extends Component
 {
+    static propTypes = {
+        chats: PropTypes.object.isRequired,
+        chatId: PropTypes.number.isRequired,
+        isLoading: PropTypes.bool.isRequired,
+    };
+
     render() {
-        const { chats, chatId } = this.props;
+        const { chats, chatId, isLoading } = this.props;
+        let chatRoom = '???';
+        if (!isLoading) {
+            chatRoom = chats[chatId].title;
+        }
+            
         return (
             <div>
-                <h1>Комната: { chats[chatId].title }</h1>
+                <h1>Комната: { chatRoom }</h1>
             </div>
         )
     }
 }
 
-const mapStateToProps = ({ messageReducer }) => ({ chats: messageReducer.chats });
+const mapStateToProps = ({ chatReducer }) => ({ 
+    chats: chatReducer.chats,
+    isLoading: chatReducer.isLoading,
+});
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
 

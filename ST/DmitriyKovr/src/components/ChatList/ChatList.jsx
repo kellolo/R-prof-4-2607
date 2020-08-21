@@ -24,6 +24,7 @@ class ChatList extends Component
         push: PropTypes.func.isRequired,
         chatId: PropTypes.number.isRequired,
         sendMessage: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
     };
 
     state = {
@@ -67,17 +68,19 @@ class ChatList extends Component
     
     componentDidUpdate(prevProps, prevState)
     {
-        const { chats } = this.props;
-        const prevCountChats = Object.keys(prevProps.chats).length;
-        const countChats = Object.keys(chats).length;
-        if (prevCountChats !== countChats) {
-            this.props.sendMessage(
-                Object.keys(this.props.messages).length + 1,
-                `Сам ты ${chats[countChats].title} !`,
-                'bot',
-                countChats
-            );
-            this.handleNavigate(`/chat/${countChats}`);
+        if (!this.props.isLoading) {
+            const { chats } = this.props;
+            const prevCountChats = Object.keys(prevProps.chats).length;
+            const countChats = Object.keys(chats).length;
+            if (prevCountChats !== countChats) {
+                this.props.sendMessage(
+                    Object.keys(this.props.messages).length + 1,
+                    `Сам ты ${chats[countChats].title} !`,
+                    'bot',
+                    countChats
+                );
+                this.handleNavigate(`/chat/${countChats}`);
+            }
         }
     }
     
@@ -138,9 +141,10 @@ class ChatList extends Component
     }
 }
 
-const mapStateToProps = ({ messageReducer }) => ({ 
-    chats: messageReducer.chats,
+const mapStateToProps = ({ messageReducer, chatReducer }) => ({ 
+    chats: chatReducer.chats,
     messages: messageReducer.messages,
+    isLoading: chatReducer.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

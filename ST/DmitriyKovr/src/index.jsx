@@ -3,7 +3,6 @@ import ReactDom from 'react-dom';
 import bootstrap from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Layout from './components/Layout/Layout.jsx';
-//import MessageField from './components/MessageField/MessageField.jsx';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 

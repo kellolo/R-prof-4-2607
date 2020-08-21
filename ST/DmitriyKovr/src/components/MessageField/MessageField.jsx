@@ -1,21 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Fab as FloatingActionButton } from '@material-ui/core';
+import { TextField, Fab as FloatingActionButton, CircularProgress } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import Message from '../Message/Message';
 import './style.css';
 
 import connect from 'react-redux/es/connect/connect';
 import { bindActionCreators } from 'redux';
-import { sendMessage } from '../../store/actions/messageActions.js'
+import { sendMessage } from '../../store/actions/messageActions.js';
+import { loadChats } from '../../store/actions/chatActions.js';
 
 class MessageField extends Component
 {
     static propTypes = {
         chatId: PropTypes.number.isRequired,
-//        messages: PropTypes.object.isRequired,
-//        chats: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
+        loadChats: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
     }
             
     state = {
@@ -45,18 +46,18 @@ class MessageField extends Component
             this.setState({ input: '' });
         }
     }
+    
+    componentDidMount() {
+        this.props.loadChats();
+    }
 
     render()
     {
-        //const { chatId, messages, chats } = this.props;
+        if (this.props.isLoading) {
+            return <CircularProgress />
+        }
+        
         const { chatId, messages, chats } = this.props;
-        /*
-        const messageElements = messages.map((message, idx) => {
-            const props = { ...message, key: idx };
-            return ( <Message { ...props } /> );
-        });
-        */
-        //console.log(messages);
         const messageElements = chats[chatId].messageList.map((messageId) => (
             <Message
                 key={ messageId }
@@ -94,13 +95,15 @@ class MessageField extends Component
     }
 }
 
-const mapStateToProps = ({ messageReducer }) => ({ 
-    chats: messageReducer.chats,
+const mapStateToProps = ({ messageReducer, chatReducer }) => ({ 
+    chats: chatReducer.chats,
     messages: messageReducer.messages,
+    isLoading: chatReducer.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     sendMessage,
+    loadChats,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageField);
