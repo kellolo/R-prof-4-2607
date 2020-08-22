@@ -1,0 +1,22 @@
+[
+ {
+  "sender": "Bot",
+  "text": "Hello",
+  "id": "chat_1_0"
+ },
+ {
+  "sender": "Bot",
+  "text": "How a u?",
+  "id": "chat_1_1"
+ },
+ {
+  "sender": "Bot",
+  "text": "Ich bin Grut",
+  "id": "chat_1_2"
+ },
+ {
+  "sender": "Me",
+  "text": "dfghfg hfg",
+  "id": "chat_1_3"
+ }
+]
