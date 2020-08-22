@@ -5,7 +5,6 @@ export default store => next => action => {
     switch (action.type) {
         case SEND_MESSAGE: {
             if (action.sender === 'me') {
-                //console.log(store.getState().messageReducer.messages);
                 setTimeout(() => {
                     const id = Object.keys(store.getState().messageReducer.messages).length + 1;
                     //console.log('+1c');
