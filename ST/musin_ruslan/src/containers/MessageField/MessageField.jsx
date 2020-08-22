@@ -6,7 +6,6 @@ import { TextField, FloatingActionButton } from "material-ui"
 import SendIcon from "material-ui/svg-icons/content/send"
 import Message from "../../components/Message";
 import { sendMessage } from "../../Actions/messageActions";
-import { addMessage } from "../../Actions/addMessage";
 import "./style.css";
 
 
@@ -32,11 +31,9 @@ class MessageField extends React.Component {
     };
 
 
-    handleSendMessage = (chatId, text, author, ) => {
+    handleSendMessage = (chatId, text, author) => {
         if (this.state.input.length > 0 || author === "'robot'") {
-            const addMessageId = Object.keys(this.props.messages).length + 1
-            this.props.addMessage(chatId, addMessageId);
-            this.props.sendMessage(text, author);
+            this.props.sendMessage(chatId, text, author);
         }
 
         if (author === "'mr7282'") {
@@ -48,7 +45,6 @@ class MessageField extends React.Component {
         const {messages} = this.props;
         const { chats } = this.props;
         const messagesArr = chats[this.props.chatId].messageList;
-        console.log(messagesArr)
 
         const messageElements = messagesArr.map( messageId => (
             <Message
@@ -80,11 +76,11 @@ class MessageField extends React.Component {
     }
 }
 
-const mapStateToProps = ({ messageReducer, chatReducer }) => ({
+const mapStateToProps = ({ messageReducer }) => ({
     messages: messageReducer.messages,
-    chats: chatReducer.chats,
+    chats: messageReducer.chats,
  });
 
- const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage, addMessage }, dispatch);
+ const mapDispatchToProps = dispatch => bindActionCreators({ sendMessage }, dispatch);
 
  export default connect(mapStateToProps, mapDispatchToProps)(MessageField);

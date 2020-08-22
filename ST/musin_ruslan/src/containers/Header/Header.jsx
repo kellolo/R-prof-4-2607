@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 import styles from './style.css';
-import { addChat } from "../../Actions/chatActions";
 
 class Header extends React.Component {
     static propTypes = {
@@ -25,10 +24,10 @@ class Header extends React.Component {
     }
 }
 
-const mapStateToProps = ({ chatReducer }) => ({
-    chats: chatReducer.chats,
+const mapStateToProps = ({ messageReducer }) => ({
+    chats: messageReducer.chats,
  });
 
- const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
+ const mapDispatchToProps = dispatch => bindActionCreators({  }, dispatch);
 
  export default connect(mapStateToProps, mapDispatchToProps)(Header);
