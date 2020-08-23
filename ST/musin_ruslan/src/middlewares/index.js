@@ -1,4 +1,5 @@
-import messageMiddlewea from "./"
+import messageMiddleware from './messageMiddleware';
 
-export default [];
-
+export default [
+   messageMiddleware,
+];

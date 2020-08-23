@@ -6,13 +6,14 @@ import { List, ListItem } from 'material-ui/List';
 import { TextField } from 'material-ui';
 import AddIcon from 'material-ui/svg-icons/content/add';
 import PropTypes from "prop-types";
+import { push } from "connected-react-router";
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import { addChat } from "../../Actions/chatActions";
 
 class ChatList extends React.Component {
     static propTypes = {
         chats: PropTypes.object.isRequired,
-        addChat: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired,
     };
 
     state = {
@@ -31,21 +32,24 @@ class ChatList extends React.Component {
 
     handleAddChat = () => {
         if (this.state.input.length > 0) {
-            this.props.addChat(this.state.input);
+            this.props.addChat(this.state.input, this.props.chatId);
             this.setState({ input: '' });
         }
+    };
+
+    hendleNavigate = (link) => {
+        this.props.push(link);
     };
 
 
     render() {
         const { chats } = this.props;
         const chatElements = Object.keys(chats).map(chatId => (
-            <Link key={ chatId } to={ `/chat/${chatId}` }>
-                <ListItem
-                primaryText={ chats[chatId].title}
-                // rightIcon={<CommunicationChatBubble />}
-                />
-            </Link>
+                    <ListItem
+                    onClick={ () => this.hendleNavigate(`/chat/${chatId}`)}
+                    primaryText={ chats[chatId].title}
+                    // rightIcon={<CommunicationChatBubble />}
+                    />
         ));
 
         return (
@@ -71,12 +75,12 @@ class ChatList extends React.Component {
     }
 }
 
-const mapStateToProps = ({ chatReducer, messageReducer }) => ({
-    chats: chatReducer.chats,
+const mapStateToProps = ({ messageReducer }) => ({
+    chats: messageReducer.chats,
     messages: messageReducer.messages,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ addChat },
+const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push },
     dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps) (ChatList);
