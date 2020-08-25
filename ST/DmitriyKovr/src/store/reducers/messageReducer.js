@@ -1,11 +1,10 @@
 import update from 'react-addons-update';
-import { SEND_MESSAGE } from '../actions/messageActions.js';
+import { SUCCESS_SEND_MESSAGE } from '../actions/messageActions.js';
 import { 
     START_CHATS_LOADING,
     SUCCESS_CHATS_LOADING,
     ERROR_CHATS_LOADING,
 } from '../actions/chatActions.js';
-import { ADD_CHAT } from '../actions/chatActions.js';
 
 
 const initialStore = {
@@ -24,17 +23,14 @@ const initialStore = {
 
 export default function messageReducer(store = initialStore, action)
 {
-    switch (action.type) {
-        
-        case SEND_MESSAGE:
+    switch (action.type)
+    {
+        case SUCCESS_SEND_MESSAGE:
         {
-            const { messageId, text, sender, chatId } = action;
             return update(store, {
-                messages: { $merge: { [messageId]: {
-                    text: text,
-                    sender: sender,
-                }}},
-            });
+                messages: { $merge: action.payload.entities.messages },
+                botMessage: { $set: false },
+           });
         }
         case START_CHATS_LOADING: {
            return update(store, {
