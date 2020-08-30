@@ -42,11 +42,16 @@ module.exports = {
         })
     ],
     devServer: {
-        port: 3000,
-        hot: true,
-        open: false,
-        historyApiFallback: {
-            index: 'index.html'
+        port: 8080,
+        // hot: true,
+        open: false,        
+        proxy: {
+            "/api": {
+                target: "http://localhost:3000/",
+                pathRewrite: { "^/api": "" },
+                secure: false,
+                changeOrigin: true
+            }
         }
     }
 }
