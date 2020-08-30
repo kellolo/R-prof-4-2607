@@ -38,8 +38,7 @@ class MessageField extends Component
         const { input } = this.state;
         
         if (input.length > 0 || sender === 'bot') {
-            const id = Object.keys(this.props.messages).length + 1;
-            this.props.sendMessage(id, message, sender, this.props.chatId);
+            this.props.sendMessage(message, sender, this.props.chatId);
         }
             
         if (sender === 'me') {

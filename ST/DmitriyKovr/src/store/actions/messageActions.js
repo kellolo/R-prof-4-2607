@@ -1,12 +1,10 @@
 import { RSAA, getJSON } from 'redux-api-middleware';
+import { normalize } from 'normalizr';
+import { chats } from '../../utils/schemas';
 
 
 export const SEND_MESSAGE = '@@message/SEND_MESSAGE';
-
-export const START_MESSAGES_LOADING = '@@message/START_MESSAGES_LOADING';
-export const SUCCESS_MESSAGES_LOADING = '@@message/SUCCESS_MESSAGES_LOADING';
-export const ERROR_MESSAGES_LOADING = '@@message/ERROR_MESSAGES_LOADING';
-
+/*
 export const sendMessage = (messageId, text, sender, chatId) => ({
     type: SEND_MESSAGE,
     messageId,
@@ -14,21 +12,28 @@ export const sendMessage = (messageId, text, sender, chatId) => ({
     sender,
     chatId,
 });
+*/
 
-export const loadMessages = () => ({
+export const START_SEND_MESSAGE = '@@message/START_SEND_MESSAGE';
+export const SUCCESS_SEND_MESSAGE = '@@message/SUCCESS_SEND_MESSAGE';
+export const ERROR_SEND_MESSAGE = '@@message/ERROR_SEND_MESSAGE';
+
+export const sendMessage = (text, sender, chatId) => ({
     [RSAA]: {
-        endpoint: '/api/messages',
-        method: 'GET',
+        endpoint: '/api/chats/send-msg',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, sender, chatId }),
         types: [
-            START_MESSAGES_LOADING,
+            START_SEND_MESSAGE,
             {
-                type: SUCCESS_MESSAGES_LOADING,
+                type: SUCCESS_SEND_MESSAGE,
+                meta: { sender, chatId },
                 payload: (action, state, res) => getJSON(res).then(
-                    json => json,
+                    json => normalize(json, [chats])
                 ),
             },
-            ERROR_MESSAGES_LOADING
-        ]
+            ERROR_SEND_MESSAGE,
+        ],
     }
 });

@@ -17,7 +17,7 @@ class Layout extends Component
     static defaultProps = {
         chatId: 1,
     };
-    
+
     render() {
         const { chatId } = this.props;
         return ([

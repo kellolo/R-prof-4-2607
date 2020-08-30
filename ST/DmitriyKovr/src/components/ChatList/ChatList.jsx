@@ -5,7 +5,6 @@ import { Fab as FloatingActionButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import SendIcon from '@material-ui/icons/Send';
 import AddIcon from '@material-ui/icons/Add';
-//import Contacts from '../Contacts/Contacts.jsx';
 import ContactsList from '../ContactsList/ContactsList.jsx';
 import './style.css';
 
@@ -66,24 +65,6 @@ class ChatList extends Component
         this.setState({ openDialog: true });
     }
     
-    componentDidUpdate(prevProps, prevState)
-    {
-        if (!this.props.isLoading) {
-            const { chats } = this.props;
-            const prevCountChats = Object.keys(prevProps.chats).length;
-            const countChats = Object.keys(chats).length;
-            if (prevCountChats !== countChats) {
-                this.props.sendMessage(
-                    Object.keys(this.props.messages).length + 1,
-                    `Сам ты ${chats[countChats].title} !`,
-                    'bot',
-                    countChats
-                );
-                this.handleNavigate(`/chat/${countChats}`);
-            }
-        }
-    }
-    
     render() {
         const { chats } = this.props;
         const chatElements = Object.keys(chats).map(chatId => (
@@ -141,7 +122,7 @@ class ChatList extends Component
     }
 }
 
-const mapStateToProps = ({ messageReducer, chatReducer }) => ({ 
+const mapStateToProps = ({ messageReducer, chatReducer }) => ({
     chats: chatReducer.chats,
     messages: messageReducer.messages,
     isLoading: chatReducer.isLoading,

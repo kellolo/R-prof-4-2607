@@ -1,27 +1,29 @@
-import { SEND_MESSAGE, sendMessage } from '../store/actions/messageActions.js';
-import { ADD_CHAT } from '../store/actions/chatActions.js';
+import { SUCCESS_SEND_MESSAGE, sendMessage } from '../store/actions/messageActions.js';
+import { SUCCESS_ADD_CHAT } from '../store/actions/chatActions.js';
 
 export default store => next => action => {
     switch (action.type) {
-        case SEND_MESSAGE: {
-            if (action.sender === 'me') {
+        case SUCCESS_SEND_MESSAGE: {
+            const { sender, chatId } = action.meta;
+            if (sender !== 'bot') {
+                
                 setTimeout(() => {
-                    const id = Object.keys(store.getState().messageReducer.messages).length + 1;
-                    //console.log('+1c');
-                    //console.log(store.getState().messageReducer.messages);
                     return store.dispatch(sendMessage(
-                    id,
-                    'Не приставай ко мне, я робот!',
-                    'bot',
-                    action.chatId
-                ))
+                        'Не приставай ко мне, я робот!',
+                        'bot',
+                        chatId
+                    ))
                 }, 1000);
             }
             break;
         }
-        case ADD_CHAT: {
-            //console.log(store.getState().messageReducer.chats);
-            break;
+        case SUCCESS_ADD_CHAT: {
+            const { title, id } = action.payload;
+            return store.dispatch(sendMessage(
+                `Сам ты ${title}!`,
+                'bot',
+                id
+            ));
         }
     }
     
